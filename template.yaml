@@ -19,12 +19,27 @@ Resources:
       CodeUri: graphql/
       Architectures:
         - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref PlayersTable
+      Environment:
+        Variables:
+          PLAYERS_TABLE: !Ref PlayersTable
       Events:
         AnyRequest:
           Type: Api
           Properties:
             Path: /graphql
             Method: ANY
+  PlayersTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: playerID
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -39,3 +54,6 @@ Outputs:
   GraphQLApi:
     Description: "API Gateway endpoint URL for Prod stage for GraphQL function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/graphql/"
+  PlayersTable:
+    Description: "DynamoDB table to store player records"
+    Value: !Ref PlayersTable
