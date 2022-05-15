@@ -48,7 +48,7 @@ describe("game-result-service", function () {
       expect(losers[1].playerID).to.equal("player3");
     })
   })
-  describe("#processWin()", function(){
+  describe("#processWinLoss()", function(){
     it("should return correct win loss ratio", function() {
       let winner = {
         wins: 20,
@@ -59,7 +59,7 @@ describe("game-result-service", function () {
       gameResultService.processWinLoss(winner, true);
       expect(winner.winLossRatio).to.equal(expectedRatio);
     })
-    it("should handle division by zero sczenario", function() {
+    it("should handle division by zero scenario", function() {
       let winner = {
         wins: 20,
         losses: 0
@@ -77,6 +77,46 @@ describe("game-result-service", function () {
       gameResultService.processWinLoss(winner, true);
       expect(winner.winLossRatio).to.equal(expectedRatio);
     })
-  })
+    it("should return correct win loss ratio for a loss", function() {
+      let loser = {
+        wins: 20,
+        losses: 2
+      }
+      let expectedRatio = (loser.wins) / (loser.losses + 1);
 
+      gameResultService.processWinLoss(loser, false);
+      expect(loser.winLossRatio).to.equal(expectedRatio);
+    })
+    it("should always initialize the wlRatioInterval field", function() {
+      let player = {}
+      gameResultService.processWinLoss(player, false);
+      expect(player.wlRatioInterval).to.equal("ALL");
+    });
+  })
+  describe("#validateWinners()", function(){
+    it("should throw error on winners > 2", function() {
+      let playerIDs = ["1","2","3","4"];
+      let winnerIDs = ["1","2","3"];
+
+      expect(() => gameResultService.validateWinners(playerIDs, winnerIDs)).to.throw();
+    })
+    it("should throw error winner doesn't exist in playerIDs", function() {
+      let playerIDs = ["1","2","3","4"];
+      let winnerIDs = ["8"];
+
+      expect(() => gameResultService.validateWinners(playerIDs, winnerIDs)).to.throw();
+    })
+    it("should not throw when inputs are valid", function() {
+      let playerIDs = ["1","2","3","4"];
+      let winnerIDs = ["1","2"];
+
+      expect(() => gameResultService.validateWinners(playerIDs, winnerIDs)).to.not.throw();
+    })
+    it("should throw when there are two winners for a singles game", function() {
+      let playerIDs = ["1","2"];
+      let winnerIDs = ["1","2"];
+
+      expect(() => gameResultService.validateWinners(playerIDs, winnerIDs)).to.throw();
+    })
+  })
 })

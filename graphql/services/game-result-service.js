@@ -85,12 +85,17 @@ let validateWinners = (playerIDs, winnerIDs) => {
     throw new Error('There can be a maxium of 2 winners in a game');
   }
 
+  if (playerIDs.length === 2 && winnerIDs.length >= 2) {
+    throw new Error('There can only be 1 winner in a singles game');
+  }
+
   winnerIDs.forEach( winnerID => {
     if (!playerIDs.find(playerID => winnerID === playerID)) {
       throw new Error(`WinnerID: ${winnerID} not found in playerIDs list`);
     }
   });
 }
+module.exports.validateWinners = validateWinners;
 
 let getWinnersAndLosers = (players, winnerIDs) => {
   let winners = [];
