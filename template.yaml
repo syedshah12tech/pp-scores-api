@@ -22,25 +22,96 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref PlayersTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref GameResultsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref WinLossRatiosTable
       Environment:
         Variables:
           PLAYERS_TABLE: !Ref PlayersTable
+          GAME_RESULTS_TABLE: !Ref GameResultsTable
+          WIN_LOSS_RATIO_TABLE: !Ref WinLossRatiosTable
+          # PLAYERS_WL_RATIO_GSI: !Ref 
       Events:
         AnyRequest:
           Type: Api
           Properties:
             Path: /graphql
             Method: ANY
+  # PlayersTable:
+  #   Type: AWS::Serverless::SimpleTable
+  #   Properties:
+  #     PrimaryKey:
+  #       Name: playerID
+  #       Type: String
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: 2
+  #       WriteCapacityUnits: 2
   PlayersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "playerID"
+          AttributeType: "S"
+        -
+          AttributeName: "winLossRatio"
+          AttributeType: "N"
+        -
+          AttributeName: "wlRatioInterval"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "playerID"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+      GlobalSecondaryIndexes: 
+        - 
+          IndexName: "wlRatioInterval"
+          KeySchema: 
+            - 
+              AttributeName: "wlRatioInterval"
+              KeyType: "HASH"
+            - 
+              AttributeName: "winLossRatio"
+              KeyType: "RANGE"
+          Projection: 
+            ProjectionType: "ALL"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: "2"
+            WriteCapacityUnits: "2"
+
+  GameResultsTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
-        Name: playerID
+        Name: gameResultID
         Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
-
+  WinLossRatiosTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "timePeriod"
+          AttributeType: "S"
+        -
+          AttributeName: "playerWLRatio"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "timePeriod"
+          KeyType: "HASH"
+        -
+          AttributeName: "playerWLRatio"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
@@ -57,3 +128,11 @@ Outputs:
   PlayersTable:
     Description: "DynamoDB table to store player records"
     Value: !Ref PlayersTable
+  GameResultsTable:
+    Description: "DynamoDB table to store game results"
+    Value: !Ref GameResultsTable
+  WinLossRatioTable:
+    Description: "DynamoDB table to store win loss ratios"
+    Value: !Ref WinLossRatiosTable
+
+

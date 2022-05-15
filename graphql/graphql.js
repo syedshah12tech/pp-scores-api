@@ -1,64 +1,57 @@
 const { ApolloServer, gql } = require('apollo-server-lambda');
 const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
 
+const playerService = require('./services/player-service');
+const gameResultService = require('./services/game-result-service');
+
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
-  type HighScore {
-    player: String
-    score: Int
-  }
 
   type Player {
-    id: String!
+    playerID: String!
     name: String!
+    wins: Int
+    losses: Int
+    winLossRatio: Float
   }
 
   type GameResult {
-    id: String!
+    gameResultID: String!
     players: [Player]
-    winners: [Player]
+    winnerIDs: [String]
     resultDate: String!
   }
 
   type Query {
-    hello: String,
-    highScores: [HighScore]
+    topPlayers(count: Int): [Player]
+    allPlayers: [Player]
   }
 
   type Mutation {
     addPlayer(name: String!): Player
-    newGameResult(playerIDs: [String]!): GameResult
+    newGameResult(playerIDs: [String]!, winnerIDs: [String], resultDate: String!): GameResult
   }
 `;
 
-const highScores = [
-  {
-    player: 'player1',
-    score: 200
-  },
-  {
-    player: 'player2',
-    score: 150
-  }
-]
-// Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
-    highScores: () => highScores
+    topPlayers: async (parent, args, context, info) => {
+      let players = await playerService.getTopPlayers(args.count);
+      return players;
+    },
+    allPlayers: async () => {
+      let players = await playerService.getAllPlayers();
+      return players;
+    }
   },
   Mutation: {
     addPlayer: async (root, args, context) => {
-      return {
-        id: 'id_p1',
-        name: args.name
-      };
+      let player = await playerService.addPlayer(args.name);
+      return player;
     },
     newGameResult: async (root, args, context) => {
-      console.log('Players: ', args.players);
-      return {
-        id: 'id_gr_1'
-      }
+      let gameResult = await gameResultService.newGameResult(args.playerIDs, args.winnerIDs, args.resultDate);
+      return gameResult;
     }
   }
 };
