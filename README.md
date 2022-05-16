@@ -124,8 +124,8 @@ Tests are defined in the `graphql/tests` folder in this project. Use NPM to inst
 
 ```bash
 pp-scores-api$ cd graphql
-hello-world$ npm install
-hello-world$ npm run test
+pp-scores-api$ npm install
+pp-scores-api$ npm run unit-tests
 ```
 
 ## Cleanup
