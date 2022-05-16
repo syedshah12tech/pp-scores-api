@@ -4,7 +4,7 @@ This project contains source code and supporting files for a serverless applicat
 
 ## Directory Structure
 It includes the following files and folders.
-
+```
 ├── README.md
 ├── events
 │   └── event.json
@@ -22,7 +22,7 @@ It includes the following files and folders.
 │               ├── game-result-service.test.js
 │               └── player-service.test.js
 └── template.yaml - The template file that defines the application's AWS resources.
-
+```
 ## About the template.yaml file
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
 
