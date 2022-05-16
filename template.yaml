@@ -24,13 +24,10 @@ Resources:
             TableName: !Ref PlayersTable
         - DynamoDBCrudPolicy:
             TableName: !Ref GameResultsTable
-        - DynamoDBCrudPolicy:
-            TableName: !Ref WinLossRatiosTable
       Environment:
         Variables:
           PLAYERS_TABLE: !Ref PlayersTable
           GAME_RESULTS_TABLE: !Ref GameResultsTable
-          WIN_LOSS_RATIO_TABLE: !Ref WinLossRatiosTable
       Events:
         AnyRequest:
           Type: Api
@@ -79,26 +76,6 @@ Resources:
       PrimaryKey:
         Name: gameResultID
         Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
-  WinLossRatiosTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        -
-          AttributeName: "timePeriod"
-          AttributeType: "S"
-        -
-          AttributeName: "playerWLRatio"
-          AttributeType: "S"
-      KeySchema:
-        -
-          AttributeName: "timePeriod"
-          KeyType: "HASH"
-        -
-          AttributeName: "playerWLRatio"
-          KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2

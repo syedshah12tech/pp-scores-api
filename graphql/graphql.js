@@ -24,6 +24,8 @@ const typeDefs = gql`
 
   type Query {
     topPlayers(count: Int): [Player]
+
+    # TODO: this two should support pagination, plus filtering and sorting
     allPlayers: [Player]
     allGameResults: [GameResult]
   }
