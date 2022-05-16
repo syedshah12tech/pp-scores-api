@@ -31,22 +31,12 @@ Resources:
           PLAYERS_TABLE: !Ref PlayersTable
           GAME_RESULTS_TABLE: !Ref GameResultsTable
           WIN_LOSS_RATIO_TABLE: !Ref WinLossRatiosTable
-          # PLAYERS_WL_RATIO_GSI: !Ref 
       Events:
         AnyRequest:
           Type: Api
           Properties:
             Path: /graphql
             Method: ANY
-  # PlayersTable:
-  #   Type: AWS::Serverless::SimpleTable
-  #   Properties:
-  #     PrimaryKey:
-  #       Name: playerID
-  #       Type: String
-  #     ProvisionedThroughput:
-  #       ReadCapacityUnits: 2
-  #       WriteCapacityUnits: 2
   PlayersTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -131,8 +121,5 @@ Outputs:
   GameResultsTable:
     Description: "DynamoDB table to store game results"
     Value: !Ref GameResultsTable
-  WinLossRatioTable:
-    Description: "DynamoDB table to store win loss ratios"
-    Value: !Ref WinLossRatiosTable
 
 
