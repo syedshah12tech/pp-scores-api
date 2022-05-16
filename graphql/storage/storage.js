@@ -70,3 +70,13 @@ const allPlayers = async () => {
   return response.Items;
 }
 module.exports.allPlayers = allPlayers;
+
+// TODO: this method is not tested yet
+const allGameResults = async () => {
+  let response = await ddbDocClient.scan({
+    TableName: GAME_RESULTS_TABLE
+  });
+  return response.Items;
+}
+module.exports.allGameResults= allGameResults;
+

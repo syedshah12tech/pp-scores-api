@@ -25,6 +25,7 @@ const typeDefs = gql`
   type Query {
     topPlayers(count: Int): [Player]
     allPlayers: [Player]
+    allGameResults: [GameResult]
   }
 
   type Mutation {
@@ -42,6 +43,10 @@ const resolvers = {
     allPlayers: async () => {
       let players = await playerService.getAllPlayers();
       return players;
+    },
+    allGameResults: async () => {
+      let gameResults = await gameResultService.getAllGameResults();
+      return gameResults;
     }
   },
   Mutation: {

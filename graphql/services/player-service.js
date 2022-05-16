@@ -17,6 +17,7 @@ let getTopPlayers = async (count = 10) => {
 }
 module.exports.getTopPlayers = getTopPlayers;
 
+// TODO: This needs to support pagination
 let getAllPlayers = async () => {
   let players = await storage.allPlayers();
   return players;

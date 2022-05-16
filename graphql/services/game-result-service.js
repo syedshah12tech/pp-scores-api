@@ -124,3 +124,19 @@ let gameResultDOToBO = (gameResultDO, include) => {
   return gameResultBO;
 }
 module.exports.gameResultDOToBO = gameResultDOToBO;
+
+// TODO: This needs to support pagination
+// TODO: Complete implementation of this method
+let getAllGameResults = async () => {
+  throw new Error("TODO: complete implementation of getAllGameResults service method");
+  // let gameResultsDOs = await storage.getAllGameResults();
+
+  // let players = await getPlayers(playerIDs);
+
+  // let gameResultBOs = [];
+  // gameResultsDOs.forEach( dataObject => {
+  //   gameResultBOs.push(gameResultDOToBO(dataObject));
+  // })
+  // return gameResultBOs;
+}
+module.exports.getAllGameResults = getAllGameResults;
