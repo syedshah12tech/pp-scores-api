@@ -113,7 +113,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-pp-scores-api$ sam logs -n GraphQLFunction --stack-name pp-scores-api --tail
+pp-scores-api$ sam logs -n GraphQLFunction --stack-name pp-scores-api --tail --profile <AWS Profile>
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -133,7 +133,7 @@ pp-scores-api$ npm run unit-tests
 To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
 
 ```bash
-aws cloudformation delete-stack --stack-name pp-scores-api
+aws cloudformation delete-stack --stack-name pp-scores-api --profile <AWS Profile>
 ```
 
 ## Resources
